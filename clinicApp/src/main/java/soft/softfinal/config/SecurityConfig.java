@@ -19,7 +19,6 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        // ⚠️ учебный проект (как у тебя было)
         return NoOpPasswordEncoder.getInstance();
     }
 
@@ -27,7 +26,6 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable);
 
-        // ✅ FIX: для /api/** НЕ редиректить на /login (HTML), а возвращать JSON 401/403
         http.exceptionHandling(exception -> exception
                 .defaultAuthenticationEntryPointFor(
                         (request, response, authException) -> {
@@ -50,30 +48,25 @@ public class SecurityConfig {
         );
 
         http.authorizeHttpRequests(authorize -> authorize
-                // публичные страницы + статика
                 .requestMatchers(
                         "/", "/login", "/register",
                         "/api/users/register",
                         "/css/**", "/js/**", "/images/**"
                 ).permitAll()
 
-                // ADMIN
                 .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
                 .requestMatchers("/api/doctors/**").hasAuthority("ROLE_ADMIN")
                 .requestMatchers("/api/patients/**").hasAuthority("ROLE_ADMIN")
                 .requestMatchers(HttpMethod.GET, "/api/users").hasAuthority("ROLE_ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/api/users/**").hasAuthority("ROLE_ADMIN")
 
-                // DOCTOR
                 .requestMatchers("/doctor-panel/**").hasAuthority("ROLE_DOCTOR")
                 .requestMatchers("/api/appointments/doctor/**").hasAuthority("ROLE_DOCTOR")
                 .requestMatchers("/api/medical-records/**").hasAuthority("ROLE_DOCTOR")
 
-                // PATIENT
                 .requestMatchers("/patient-panel/**").hasAuthority("ROLE_PATIENT")
                 .requestMatchers("/api/appointments/patient/**").hasAuthority("ROLE_PATIENT")
 
-                // общий доступ (залогиненные)
                 .requestMatchers("/profile").authenticated()
                 .requestMatchers("/api/users/me").authenticated()
                 .requestMatchers(HttpMethod.PUT, "/api/users/*/profile").authenticated()

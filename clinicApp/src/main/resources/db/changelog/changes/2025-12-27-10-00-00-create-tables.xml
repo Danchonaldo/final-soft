@@ -5,7 +5,6 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                             http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-    <!-- Security -->
     <changeSet id="create-permissions-table" author="student">
         <createTable tableName="t_permissions">
             <column name="id" type="bigint" autoIncrement="true">
@@ -45,7 +44,6 @@
                                  referencedTableName="t_permissions" referencedColumnNames="id"/>
     </changeSet>
 
-    <!-- Clinic domain -->
     <changeSet id="create-doctors-table" author="student">
         <createTable tableName="t_doctors">
             <column name="id" type="bigint" autoIncrement="true">

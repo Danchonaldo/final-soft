@@ -26,7 +26,7 @@ public class Appointment extends BaseEntity {
     private String appointmentDateTime;
 
     @Column(name = "status", nullable = false)
-    private String status; // SCHEDULED, COMPLETED, CANCELED
+    private String status;
 
     @Column(name = "reason")
     private String reason;

@@ -26,7 +26,6 @@ public class UserController {
         return userService.register(request);
     }
 
-    // ✅ НОВОЕ: текущий пользователь (JSON), без DTO/новых классов
     @GetMapping("/me")
     @PreAuthorize("isAuthenticated()")
     public Map<String, Object> me(Authentication authentication) {
