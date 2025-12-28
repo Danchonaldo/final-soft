@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <!-- 1. Создаем роли -->
+    <changeSet id="insert-roles-clinic" author="student">
+        <insert tableName="t_permissions"><column name="permission" value="ROLE_ADMIN"/></insert>
+        <insert tableName="t_permissions"><column name="permission" value="ROLE_DOCTOR"/></insert>
+        <insert tableName="t_permissions"><column name="permission" value="ROLE_PATIENT"/></insert>
+    </changeSet>
+
+    <!-- 2. Создаем аккаунты (пароли везде 1234) -->
+    <changeSet id="insert-users-clinic" author="student">
+        <!-- Администратор (ID 1) -->
+        <insert tableName="t_users">
+            <column name="email" value="admin@clinic.com"/>
+            <column name="password" value="1234"/>
+            <column name="full_name" value="System Admin"/>
+        </insert>
+
+        <!-- Врач (ID 2) -->
+        <insert tableName="t_users">
+            <column name="email" value="doctor@clinic.com"/>
+            <column name="password" value="1234"/>
+            <column name="full_name" value="Dr. House"/>
+        </insert>
+
+        <!-- Пациент (ID 3) -->
+        <insert tableName="t_users">
+            <column name="email" value="patient@clinic.com"/>
+            <column name="password" value="1234"/>
+            <column name="full_name" value="Arman Patient"/>
+        </insert>
+    </changeSet>
+
+    <!-- 3. Назначаем роли пользователям -->
+    <changeSet id="assign-roles-clinic" author="student">
+        <insert tableName="t_users_roles"><column name="user_id" value="1"/><column name="roles_id" value="1"/></insert> <!-- ADMIN -->
+        <insert tableName="t_users_roles"><column name="user_id" value="2"/><column name="roles_id" value="2"/></insert> <!-- DOCTOR -->
+        <insert tableName="t_users_roles"><column name="user_id" value="3"/><column name="roles_id" value="3"/></insert> <!-- PATIENT -->
+    </changeSet>
+
+    <!-- 4. Создаем профили Doctor и Patient (нужно для связей в базе) -->
+    <changeSet id="insert-profiles-clinic" author="student">
+        <insert tableName="t_doctors">
+            <column name="user_id" value="2"/>
+            <column name="specialization" value="Therapist"/>
+            <column name="cabinet" value="101"/>
+            <column name="phone" value="+7 777 000 00 01"/>
+        </insert>
+
+        <insert tableName="t_patients">
+            <column name="user_id" value="3"/>
+            <column name="iin" value="000000000000"/>
+            <column name="birth_date" value="2000-01-01"/>
+            <column name="phone" value="+7 777 000 00 02"/>
+        </insert>
+    </changeSet>
+
+    <!-- 5. Пример записи на приём и медицинской записи -->
+    <changeSet id="insert-appointment-and-record" author="student">
+        <!-- doctor_id и patient_id здесь - это ID профилей в t_doctors / t_patients (обычно будут 1 и 1 на чистой БД) -->
+        <insert tableName="t_appointments">
+            <column name="doctor_id" value="1"/>
+            <column name="patient_id" value="1"/>
+            <column name="appointment_datetime" value="2025-12-28 10:00"/>
+            <column name="status" value="SCHEDULED"/>
+            <column name="reason" value="General check-up"/>
+        </insert>
+
+        <insert tableName="t_medical_records">
+            <column name="appointment_id" value="1"/>
+            <column name="doctor_id" value="1"/>
+            <column name="patient_id" value="1"/>
+            <column name="diagnosis" value="Pending"/>
+            <column name="treatment" value="--"/>
+            <column name="notes" value="Record will be completed after appointment."/>
+            <column name="created_at" value="2025-12-27"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

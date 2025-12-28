@@ -1,0 +1,22 @@
+version: '3.1'
+
+services:
+  main-db:
+    image: 'postgres'
+    container_name: 'main-database-container'
+    environment:
+      - POSTGRES_USER=danchonaldo
+      - POSTGRES_PASSWORD=Dancho2005
+      - POSTGRES_DB=final-soft
+    ports:
+      - "2345:5432"
+
+  test-db:
+    image: 'postgres'
+    container_name: 'test-database-container'
+    environment:
+      - POSTGRES_USER=danchonaldo-test
+      - POSTGRES_PASSWORD=Dancho2005
+      - POSTGRES_DB=final-soft-test
+    ports:
+      - "2346:5432"

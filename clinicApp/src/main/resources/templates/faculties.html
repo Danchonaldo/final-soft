@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+</head>
+<body class="bg-light">
+<div th:replace="~{navbar :: header}"></div>
+<div class="container mt-4">
+    <h2 class="fw-bold mb-4"><i class="bi bi-diagram-3-fill text-primary"></i> University Structure</h2>
+    <div class="row g-4">
+        <div class="col-md-6" th:each="f : ${faculties}">
+            <div class="card border-0 shadow-sm rounded-4 p-3 h-100">
+                <div class="card-body">
+                    <h4 class="fw-bold text-dark border-start border-primary border-4 ps-3" th:text="${f.name}"></h4>
+                    <p class="text-muted mt-2" th:text="${f.description}"></p>
+                    <div class="mt-4">
+                        <h6 class="small fw-bold text-uppercase text-secondary">Affiliated Groups</h6>
+                        <div class="d-flex flex-wrap gap-2">
+                            <span th:each="g : ${groups}" th:if="${g.faculty.id == f.id}"
+                                  class="badge bg-dark px-3 py-2 rounded-pill" th:text="${g.name}"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

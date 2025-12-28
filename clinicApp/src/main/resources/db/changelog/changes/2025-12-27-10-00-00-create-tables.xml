@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <!-- Security -->
+    <changeSet id="create-permissions-table" author="student">
+        <createTable tableName="t_permissions">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="permission" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-users-table" author="student">
+        <createTable tableName="t_users">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="email" type="varchar(255)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="password" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="full_name" type="varchar(255)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-users-roles-table" author="student">
+        <createTable tableName="t_users_roles">
+            <column name="user_id" type="bigint"/>
+            <column name="roles_id" type="bigint"/>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="t_users_roles" baseColumnNames="user_id"
+                                 constraintName="fk_user_role_user"
+                                 referencedTableName="t_users" referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="t_users_roles" baseColumnNames="roles_id"
+                                 constraintName="fk_user_role_perm"
+                                 referencedTableName="t_permissions" referencedColumnNames="id"/>
+    </changeSet>
+
+    <!-- Clinic domain -->
+    <changeSet id="create-doctors-table" author="student">
+        <createTable tableName="t_doctors">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints unique="true"/>
+            </column>
+            <column name="specialization" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="cabinet" type="varchar(50)"/>
+            <column name="phone" type="varchar(50)"/>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="t_doctors" baseColumnNames="user_id"
+                                 constraintName="fk_doctor_user"
+                                 referencedTableName="t_users" referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="create-patients-table" author="student">
+        <createTable tableName="t_patients">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints unique="true"/>
+            </column>
+            <column name="iin" type="varchar(20)">
+                <constraints unique="true"/>
+            </column>
+            <column name="birth_date" type="varchar(50)"/>
+            <column name="phone" type="varchar(50)"/>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="t_patients" baseColumnNames="user_id"
+                                 constraintName="fk_patient_user"
+                                 referencedTableName="t_users" referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="create-appointments-table" author="student">
+        <createTable tableName="t_appointments">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="doctor_id" type="bigint"/>
+            <column name="patient_id" type="bigint"/>
+            <column name="appointment_datetime" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="reason" type="text"/>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="t_appointments" baseColumnNames="doctor_id"
+                                 constraintName="fk_appointment_doctor"
+                                 referencedTableName="t_doctors" referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="t_appointments" baseColumnNames="patient_id"
+                                 constraintName="fk_appointment_patient"
+                                 referencedTableName="t_patients" referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="create-medical-records-table" author="student">
+        <createTable tableName="t_medical_records">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="appointment_id" type="bigint">
+                <constraints unique="true"/>
+            </column>
+            <column name="doctor_id" type="bigint"/>
+            <column name="patient_id" type="bigint"/>
+            <column name="diagnosis" type="varchar(255)"/>
+            <column name="treatment" type="varchar(255)"/>
+            <column name="notes" type="text"/>
+            <column name="created_at" type="varchar(50)"/>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="t_medical_records" baseColumnNames="appointment_id"
+                                 constraintName="fk_record_appointment"
+                                 referencedTableName="t_appointments" referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="t_medical_records" baseColumnNames="doctor_id"
+                                 constraintName="fk_record_doctor"
+                                 referencedTableName="t_doctors" referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="t_medical_records" baseColumnNames="patient_id"
+                                 constraintName="fk_record_patient"
+                                 referencedTableName="t_patients" referencedColumnNames="id"/>
+    </changeSet>
+
+</databaseChangeLog>

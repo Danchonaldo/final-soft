@@ -1,0 +1,66 @@
+<nav th:fragment="header" class="navbar navbar-expand-lg navbar-dark bg-dark shadow mb-4"
+     xmlns:th="http://www.thymeleaf.org"
+     xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+  <div class="container">
+    <a class="navbar-brand fw-bold" href="/">
+      <i class="bi bi-mortarboard-fill text-primary me-2"></i>UNI-SYSTEM
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto fw-medium">
+        <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="/courses">Courses</a></li>
+        <li class="nav-item"><a class="nav-link" href="/faculties">Structure</a></li>
+
+        <!-- Видно всем авторизованным -->
+        <li class="nav-item" sec:authorize="isAuthenticated()">
+          <a class="nav-link" href="/my-schedule"><i class="bi bi-calendar3 me-1"></i>Schedule</a>
+        </li>
+
+        <!-- Только для АДМИНА -->
+        <li class="nav-item" sec:authorize="hasAuthority('ROLE_ADMIN')">
+          <a class="nav-link text-danger fw-bold" href="/admin/users"><i class="bi bi-people-fill me-1"></i>Users Control</a>
+        </li>
+
+        <!-- Только для УЧИТЕЛЯ -->
+        <li class="nav-item" sec:authorize="hasAuthority('ROLE_TEACHER')">
+          <a class="nav-link text-warning" href="/teacher-panel"><i class="bi bi-star-fill me-1"></i>Grading</a>
+        </li>
+        <li class="nav-item" sec:authorize="hasAuthority('ROLE_TEACHER')">
+          <a class="nav-link text-warning" href="/teacher/attendance"><i class="bi bi-person-check me-1"></i>Attendance</a>
+        </li>
+
+        <!-- Только для СТУДЕНТА -->
+        <li class="nav-item" sec:authorize="hasAuthority('ROLE_STUDENT')">
+          <a class="nav-link text-info" href="/my-grades"><i class="bi bi-file-earmark-bar-graph me-1"></i>My Grades</a>
+        </li>
+        <li class="nav-item" sec:authorize="hasAuthority('ROLE_STUDENT')">
+          <a class="nav-link text-info" href="/student/enroll"><i class="bi bi-plus-circle me-1"></i>Enroll</a>
+        </li>
+      </ul>
+
+      <div class="d-flex">
+        <div sec:authorize="isAnonymous()">
+          <a class="btn btn-outline-light btn-sm me-2 rounded-pill" href="/login">Login</a>
+          <a class="btn btn-primary btn-sm rounded-pill" href="/register">Register</a>
+        </div>
+        <div sec:authorize="isAuthenticated()" class="dropdown">
+          <button class="btn btn-outline-info btn-sm dropdown-toggle rounded-pill" type="button" data-bs-toggle="dropdown">
+            <i class="bi bi-person-circle me-1"></i> <span th:text="${#authentication.principal.fullName}"></span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2">
+            <li><a class="dropdown-item" href="/profile">My Profile</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li>
+              <form th:action="@{'/sign-out'}" method="post" class="px-3">
+                <button class="btn btn-danger btn-sm w-100 rounded-pill" type="submit">Logout</button>
+              </form>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>

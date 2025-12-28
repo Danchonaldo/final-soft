@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="seed-roles" author="test">
+        <insert tableName="t_permissions"><column name="permission" value="ROLE_ADMIN"/></insert>
+        <insert tableName="t_permissions"><column name="permission" value="ROLE_DOCTOR"/></insert>
+        <insert tableName="t_permissions"><column name="permission" value="ROLE_PATIENT"/></insert>
+    </changeSet>
+
+    <changeSet id="seed-users" author="test">
+        <insert tableName="t_users">
+            <column name="email" value="admin@test.kz"/>
+            <column name="password" value="1234"/>
+            <column name="full_name" value="Test Admin"/>
+        </insert>
+        <insert tableName="t_users">
+            <column name="email" value="doctor@test.kz"/>
+            <column name="password" value="1234"/>
+            <column name="full_name" value="Test Doctor"/>
+        </insert>
+        <insert tableName="t_users">
+            <column name="email" value="patient@test.kz"/>
+            <column name="password" value="1234"/>
+            <column name="full_name" value="Test Patient"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="seed-user-roles" author="test">
+        <insert tableName="t_users_roles"><column name="user_id" value="1"/><column name="roles_id" value="1"/></insert>
+        <insert tableName="t_users_roles"><column name="user_id" value="2"/><column name="roles_id" value="2"/></insert>
+        <insert tableName="t_users_roles"><column name="user_id" value="3"/><column name="roles_id" value="3"/></insert>
+    </changeSet>
+
+    <changeSet id="seed-profiles" author="test">
+        <insert tableName="t_doctors">
+            <column name="user_id" value="2"/>
+            <column name="specialization" value="Cardiologist"/>
+            <column name="cabinet" value="202"/>
+            <column name="phone" value="+7 700 000 00 01"/>
+        </insert>
+        <insert tableName="t_patients">
+            <column name="user_id" value="3"/>
+            <column name="iin" value="111111111111"/>
+            <column name="birth_date" value="1999-12-31"/>
+            <column name="phone" value="+7 700 000 00 02"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

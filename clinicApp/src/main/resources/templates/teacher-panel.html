@@ -1,0 +1,25 @@
+<div th:replace="~{navbar :: header}"></div>
+<div class="container">
+  <div class="card shadow p-4 col-md-6 mx-auto">
+    <h4 class="text-primary"><i class="bi bi-journal-check"></i> Grading System</h4>
+    <form th:action="@{'/api/grades/assign'}" method="post">
+      <div class="mb-3">
+        <label>Student</label>
+        <select name="studentId" class="form-select">
+          <option th:each="u : ${users}" th:value="${u.id}" th:text="${u.fullName}"></option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label>Course</label>
+        <select name="courseId" class="form-select">
+          <option th:each="c : ${courses}" th:value="${c.id}" th:text="${c.name}"></option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label>Final Score</label>
+        <input type="number" name="value" class="form-control" placeholder="0-100">
+      </div>
+      <button class="btn btn-success w-100">Save Grade</button>
+    </form>
+  </div>
+</div>

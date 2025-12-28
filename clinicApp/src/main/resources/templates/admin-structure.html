@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"></head>
+<body>
+<div th:replace="~{navbar :: header}"></div>
+<div class="container">
+  <h3>University Structure</h3>
+  <div class="row mt-4">
+    <div class="col-md-6">
+      <div class="card p-3 shadow-sm">
+        <h5>Faculties</h5>
+        <ul class="list-group">
+          <li class="list-group-item" th:each="f : ${faculties}" th:text="${f.name}"></li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card p-3 shadow-sm">
+        <h5>Groups</h5>
+        <table class="table">
+          <thead><tr><th>Group Name</th><th>Faculty</th></tr></thead>
+          <tbody>
+          <tr th:each="g : ${groups}">
+            <td th:text="${g.name}"></td>
+            <td th:text="${g.faculty.name}"></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
